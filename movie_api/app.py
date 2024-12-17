@@ -5,7 +5,7 @@ from schema import Query, Mutation
 from models import db
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Elias928@localhost/movie_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:placeholder@localhost/movie_db'
 db.init_app(app)
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
