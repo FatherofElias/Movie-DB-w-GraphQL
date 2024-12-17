@@ -6,7 +6,6 @@ class Base(DeclarativeBase):
 
 db = SQLAlchemy(model_class=Base)
 
-# Association table for many-to-many relationship
 movies_genres = db.Table('movies_genres',
     db.Column('movie_id', db.Integer, db.ForeignKey('movies.id'), primary_key=True),
     db.Column('genre_id', db.Integer, db.ForeignKey('genres.id'), primary_key=True)

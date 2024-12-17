@@ -18,18 +18,26 @@ class AddMovie(graphene.Mutation):
         title = graphene.String(required=True)
         director = graphene.String(required=True)
         year = graphene.Int(required=True)
+        genre_ids = graphene.List(graphene.Int)
 
     movie = graphene.Field(Movie)
 
-    def mutate(self, info, title, director, year):
+    def mutate(self, info, title, director, year, genre_ids):
         with Session(db.engine) as session:
-            with session.begin():
-                movie = MovieModel(title=title, director=director, year=year)
-                session.add(movie)
-
-
+            movie = MovieModel(title=title, director=director, year=year)
+            if genre_ids:
+                genres = session.execute(db.select(GenreModel).where(GenreModel.id.in_(genre_ids))).scalars().all()
+                movie.genres.extend(genres)
+            session.add(movie)
+            session.commit()
             session.refresh(movie)
-            return AddMovie(movie=movie)
+
+           
+            genres = movie.genres 
+        return AddMovie(movie=movie)
+
+
+
 
 class UpdateMovie(graphene.Mutation):
     class Arguments:
