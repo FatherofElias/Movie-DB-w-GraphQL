@@ -153,14 +153,27 @@ class Query(graphene.ObjectType):
             genre = session.execute(db.select(GenreModel).where(GenreModel.id == genre_id)).scalars().first()
             if not genre:
                 raise Exception("Genre not found.")
-            return genre.movies
+            movies = genre.movies  
+
+            for movie in movies:
+                movie.genres
+
+          
+            for movie in movies:
+                session.expunge(movie)
+            return movies
 
     def resolve_get_genres_by_movie(self, info, movie_id):
         with Session(db.engine) as session:
             movie = session.execute(db.select(MovieModel).where(MovieModel.id == movie_id)).scalars().first()
             if not movie:
                 raise Exception("Movie not found.")
-            return movie.genres
+            genres = movie.genres  
+
+
+            session.expunge(movie)
+            return genres
+
 
 
 
