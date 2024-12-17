@@ -128,6 +128,33 @@ class DeleteGenre(graphene.Mutation):
 
 
 
+class Query(graphene.ObjectType):
+    movies = graphene.List(Movie)
+    genres = graphene.List(Genre)
+    get_movies_by_genre = graphene.List(Movie, genre_id=graphene.Int(required=True))
+    get_genres_by_movie = graphene.List(Genre, movie_id=graphene.Int(required=True))
+
+    def resolve_movies(self, info):
+        return db.session.execute(db.select(MovieModel)).scalars()
+
+    def resolve_genres(self, info):
+        return db.session.execute(db.select(GenreModel)).scalars()
+
+    def resolve_get_movies_by_genre(self, info, genre_id):
+        with Session(db.engine) as session:
+            genre = session.execute(db.select(GenreModel).where(GenreModel.id == genre_id)).scalars().first()
+            if not genre:
+                raise Exception("Genre not found.")
+            return genre.movies
+
+    def resolve_get_genres_by_movie(self, info, movie_id):
+        with Session(db.engine) as session:
+            movie = session.execute(db.select(MovieModel).where(MovieModel.id == movie_id)).scalars().first()
+            if not movie:
+                raise Exception("Movie not found.")
+            return movie.genres
+
+
 
 class Mutation(graphene.ObjectType):
     create_movie = AddMovie.Field()
@@ -136,3 +163,5 @@ class Mutation(graphene.ObjectType):
     create_genre = CreateGenre.Field()
     update_genre = UpdateGenre.Field()
     delete_genre = DeleteGenre.Field()
+
+schema = graphene.Schema(query=Query, mutation=Mutation)
