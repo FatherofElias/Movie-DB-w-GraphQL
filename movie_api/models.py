@@ -6,10 +6,17 @@ class Base(DeclarativeBase):
 
 db = SQLAlchemy(model_class=Base)
 
+# Association table for many-to-many relationship
+movies_genres = db.Table('movies_genres',
+    db.Column('movie_id', db.Integer, db.ForeignKey('movies.id'), primary_key=True),
+    db.Column('genre_id', db.Integer, db.ForeignKey('genres.id'), primary_key=True)
+)
+
 class Genre(Base):
     __tablename__ = 'genres'
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(db.String(255), nullable=False, unique=True)
+    movies: Mapped[list['Movie']] = relationship('Movie', secondary=movies_genres, back_populates='genres')
 
 class Movie(Base):
     __tablename__ = 'movies'
@@ -17,5 +24,4 @@ class Movie(Base):
     title: Mapped[str] = mapped_column(db.String(255))
     director: Mapped[str] = mapped_column(db.String(255))
     year: Mapped[int] = mapped_column(db.Integer)
-    genre_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey('genres.id'))
-    genre: Mapped['Genre'] = relationship('Genre')
+    genres: Mapped[list['Genre']] = relationship('Genre', secondary=movies_genres, back_populates='movies')
