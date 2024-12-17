@@ -1,6 +1,6 @@
 import graphene
 from graphene_sqlalchemy import SQLAlchemyObjectType
-from models import Movie as MovieModel, db
+from models import Movie as MovieModel, Genre as GenreModel, db
 from sqlalchemy.orm import Session
 
 class Movie(SQLAlchemyObjectType):
@@ -74,7 +74,7 @@ class DeleteMovie(graphene.Mutation):
 
 class Genre(SQLAlchemyObjectType):
     class Meta:
-        model = Genre
+        model = GenreModel
 
 class CreateGenre(graphene.Mutation):
     class Arguments:
@@ -86,10 +86,10 @@ class CreateGenre(graphene.Mutation):
         if not name or len(name) > 255:
             raise Exception("Invalid genre name.")
         with Session(db.engine) as session:
-            with session.begin():
-                genre = Genre(name=name)
-                session.add(genre)
-                session.refresh(genre)
+            genre = GenreModel(name=name)
+            session.add(genre)
+            session.commit()
+            session.refresh(genre)
         return CreateGenre(genre=genre)
 
 class UpdateGenre(graphene.Mutation):
@@ -103,12 +103,12 @@ class UpdateGenre(graphene.Mutation):
         if not name or len(name) > 255:
             raise Exception("Invalid genre name.")
         with Session(db.engine) as session:
-            with session.begin():
-                genre = session.execute(db.select(Genre).where(Genre.id == id)).scalars().first()
-                if not genre:
-                    raise Exception("Genre not found.")
-                genre.name = name
-                session.refresh(genre)
+            genre = session.execute(db.select(GenreModel).where(GenreModel.id == id)).scalars().first()
+            if not genre:
+                raise Exception("Genre not found.")
+            genre.name = name
+            session.commit() 
+            session.refresh(genre)
         return UpdateGenre(genre=genre)
 
 class DeleteGenre(graphene.Mutation):
@@ -119,13 +119,14 @@ class DeleteGenre(graphene.Mutation):
 
     def mutate(self, info, id):
         with Session(db.engine) as session:
-            with session.begin():
-                genre = session.execute(db.select(Genre).where(Genre.id == id)).scalars().first()
-                if not genre:
-                    raise Exception("Genre not found.")
-                session.delete(genre)
-                session.refresh(genre)
+            genre = session.execute(db.select(GenreModel).where(GenreModel.id == id)).scalars().first()
+            if not genre:
+                raise Exception("Genre not found.")
+            session.delete(genre)
+            session.commit()  
         return DeleteGenre(genre=genre)
+
+
 
 
 class Mutation(graphene.ObjectType):
