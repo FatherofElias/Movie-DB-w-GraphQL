@@ -17,8 +17,8 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: Elias928
           MYSQL_DATABASE: movie_db
-          MYSQL_USER: root
-          MYSQL_PASSWORD: Elias928
+          MYSQL_USER: appuser
+          MYSQL_PASSWORD: appuserpassword
     
     steps:
       - name: Checkout repository
