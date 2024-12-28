@@ -41,11 +41,7 @@ jobs:
       - name: Set FLASK_APP environment variable
         run: echo "FLASK_APP=movie_api.app" >> $GITHUB_ENV
 
-      - name: Wait for MySQL to be ready
-        run: |
-          docker-compose up -d
-          while ! mysqladmin ping --host="localhost" --port=3306 --user="root" --password="Elias928" --silent; do sleep 1; done
-
+     
       - name: Run migrations
         run: |
           flask db upgrade  # Ensure migrations are applied
