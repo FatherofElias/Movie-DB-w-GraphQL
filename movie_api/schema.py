@@ -1,6 +1,6 @@
 import graphene
 from graphene_sqlalchemy import SQLAlchemyObjectType
-from models import Movie as MovieModel, Genre as GenreModel, db
+from movie_api.models import Movie as MovieModel, Genre as GenreModel, db  
 from sqlalchemy.orm import Session
 
 class Movie(SQLAlchemyObjectType):
