@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - feature/tests 
+      - feature/tests  
 
 jobs:
   build:
@@ -22,15 +22,16 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r movie_api/requirements.txt
+          pip install -r movie_api/requirements.txt 
 
       - name: Set up MySQL
         uses: mirromutth/mysql-action@v1.1
         with:
-          mysql-version: '5.7'
-          database: 'movie_db'
-          username: 'root'
-          password: 'Elias928'  
+          mysql version: '5.7'
+          mysql database: 'movie_db'
+          mysql root password: 'Elias928'  
+          mysql user: 'root'
+          mysql password: 'Elias928'
 
       - name: Run migrations
         run: |
@@ -50,13 +51,13 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.42'
+          python-version: '3.x'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r movie_api/requirements.txt
+          pip install -r movie_api/requirements.txt  # Updated path to requirements.txt
 
       - name: Deploy application
         run: |
-          # Deployment commands go here
+          # Deployment commands go here based on your deployment steps
