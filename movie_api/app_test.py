@@ -1,5 +1,5 @@
 import unittest
-from models import Movie, Genre, db
+from movie_api.models import Movie, Genre, db
 
 class TestNegativeSum(unittest.TestCase):
     def test_negative_sum(self):

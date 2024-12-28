@@ -24,17 +24,25 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r movie_api/requirements.txt 
 
+      - name: Start MySQL service
+        run: sudo service mysql start 
+
       - name: Set up MySQL
         uses: mirromutth/mysql-action@v1.1
         with:
           mysql version: '5.7'
+          character set server: 'utf8mb4'
+          collation server: 'utf8mb4_general_ci'
+          mysql root password: 'Elias928'
           mysql database: 'movie_db'
-          mysql root password: 'Elias928' 
           mysql user: 'root'
           mysql password: 'Elias928'
 
       - name: Set FLASK_APP environment variable
         run: echo "FLASK_APP=movie_api.app" >> $GITHUB_ENV
+
+      - name: Wait for MySQL to be ready
+        run: sleep 15  
 
       - name: Run migrations
         run: |
@@ -59,7 +67,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r movie_api/requirements.txt  
+          pip install -r movie_api/requirements.txt 
 
       - name: Deploy application
         run: |
