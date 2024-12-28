@@ -1,9 +1,8 @@
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 from flask_graphql import GraphQLView
 import graphene
-from schema import Query, Mutation
-from models import db
-
+from movie_api.schema import Query, Mutation  
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Elias928@localhost/movie_db'
 db.init_app(app)
@@ -14,7 +13,6 @@ app.add_url_rule(
     '/graphql',
     view_func=GraphQLView.as_view('graphql', schema=schema, graphiql=True)
 )
-
 
 with app.app_context():
     db.create_all()
