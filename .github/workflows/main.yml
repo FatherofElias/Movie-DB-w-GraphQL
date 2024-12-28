@@ -1,0 +1,62 @@
+name: CI/CD for Flask GraphQL App
+
+on:
+  push:
+    branches:
+      - main
+      - feature/tests   # Include feature branch to run pipeline
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'  # Specify Python version
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Set up MySQL
+        uses: mirromutth/mysql-action@v1.0.10
+        with:
+          mysql-version: '5.7'
+          database: 'movie_db'
+          username: 'root'
+          password: 'placeholder'
+
+      - name: Run migrations
+        run: |
+          python app.py  # Ensure database tables are created
+
+      - name: Run tests
+        run: |
+          python -m unittest discover
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'  
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Deploy application
+        run: |
+          # Deploy commands go here
