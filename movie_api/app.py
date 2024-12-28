@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_graphql import GraphQLView
 import graphene
 from movie_api.schema import Query, Mutation  
-from models import db
+from movie_api.models import db
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Elias928@localhost/movie_db'
