@@ -1,13 +1,16 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_graphql import GraphQLView
+from flask_migrate import Migrate  
 import graphene
-from movie_api.schema import Query, Mutation  
-from movie_api.models import db
+from movie_api.schema import Query, Mutation
+from movie_api.models import db  
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Elias928@localhost/movie_db'
 db.init_app(app)
+
+migrate = Migrate(app, db) 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
 
