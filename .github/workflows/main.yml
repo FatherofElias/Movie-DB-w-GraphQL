@@ -19,6 +19,7 @@ jobs:
           --health-retries=3
         ports: ['3306:3306']
         env:
+          MYSQL_ROOT_PASSWORD: Elias928
           MYSQL_DATABASE: movie_db
           MYSQL_USER: root
           MYSQL_PASSWORD: Elias928
