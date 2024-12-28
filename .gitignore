@@ -1,24 +1,50 @@
 # see https://help.github.com/articles/ignoring-files/ for more about ignoring files
 
-# dependancies
-/node_modules
-/.pnp
-.pnp.js
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
 
-# testing
-/coverage
+# Flask stuff:
+instance/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
 
-# production
-/build
+# Testing Setup
+.coverage
+.tests/
+test_*.py
 
+# MySQL environment files
+.env
 
-# misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# Environment and dependency files
+*.env
+venv/
+ENV/
+env/
+.venv/
+env/
+bin/
+build/
+lib/
+include/
+*.egg-info/
+pip-lock.json
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# Logs
+logs/
+*.log
+
+# Virtual Environment
+venv/
+
+# IDEs
+.vscode/
+.idea/
+
+# DS_Store
+*.DS_Store
